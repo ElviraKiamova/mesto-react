@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import api from '../utils/Api';
+import Card from '../components/Card.js';
 
 function Main(props) {
-  const {onEditAvatar, onEditProfile, onAddPlace} = props;
+  const {onEditAvatar, onEditProfile, onAddPlace, handleCardClick} = props;
 
   const [cards, setCards] = useState([]);
   const [userName, setUserName] = useState();
@@ -73,18 +74,14 @@ const searchUserApiResults = () => {
         </section>
 
         <section className="elements page__elements">
-          {cards.map((item, i) => (
-      <article key={item.id} className="element" data-id="">
-        <button type="button" className="element__delete-button"></button>
-        <img className="element__image" alt="" src={item.link}/>
-        <div src="#" className="element__block">
-          <h2 className="element__title">{item.name}</h2>
-          <div className="element__container-heart">
-            <button type="button" className="element__heart-button"></button>
-            <p className="element__counter">{}</p>
-          </div>
-        </div>
-      </article>))}
+          {cards.map((card) => (
+            <Card 
+              key={card._id}
+              name={card.name} 
+              link={card.link}
+              onCardClick={handleCardClick}
+            />
+          ))}
         </section>
 
       </main>

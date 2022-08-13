@@ -1,12 +1,21 @@
-// import React from 'react';
+import React from 'react';
 
 
-// function Card(props) {
-//   const {} = props;
+function Card({name, link}) {
 
-//   return (
-//     <></>
-//   );
-// }
+  return (
+    <article className="element" data-id="">
+        <button type="button" className="element__delete-button"></button>
+        <img className="element__image" alt="" src={link}/>
+        <div src="#" className="element__block">
+          <h2 className="element__title">{name}</h2>
+          <div className="element__container-heart">
+            <button type="button" className="element__heart-button"></button>
+            <p className="element__counter">{}</p>
+          </div>
+        </div>
+      </article>
+  );
+}
 
-// export default Card;
+export default Card;

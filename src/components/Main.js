@@ -6,9 +6,9 @@ function Main(props) {
   const {onEditAvatar, onEditProfile, onAddPlace, handleCardClick} = props;
 
   const [cards, setCards] = useState([]);
-  const [userName, setUserName] = useState();
-  const [userDescription, setUserDescription] = useState();
-  const [userAvatar, setUserAvatar] = useState();
+  const [userName, setUserName] = useState("");
+  const [userDescription, setUserDescription] = useState("");
+  const [userAvatar, setUserAvatar] = useState("");
 
 
  
@@ -74,12 +74,13 @@ const searchUserApiResults = () => {
         </section>
 
         <section className="elements page__elements">
-          {cards.map((card) => (
+          {cards.length && cards.map((card) => (
             <Card 
               key={card._id}
               name={card.name} 
               link={card.link}
               onCardClick={handleCardClick}
+              // onDeleteCardClick={handleDeleteClick}
             />
           ))}
         </section>

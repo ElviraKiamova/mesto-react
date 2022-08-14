@@ -1,33 +1,33 @@
 import React, { useState } from 'react'
 import Header from './Header.js';
-import Main from './Main';
-import Footer from './Footer';
-import PopupWithForm from './PopupWithForm';
+import Main from './Main.js';
+import Footer from './Footer.js';
+import PopupWithForm from './PopupWithForm.js';
+// import ImagePopup from './ImagePopup.js';
 
+function App() {
+const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
+const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
+const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
 
-function App(props) {
-const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState("");
-const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState("");
-const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState("");
-
-
-
-  const handleEditAvatarClick = () => {
-    const popupAvatar = document.querySelector(".popup_new-avatar");
-    popupAvatar.classList.add("popup_opened");
+const handleEditAvatarClick = () => {
+    setIsEditAvatarPopupOpen(!isEditAvatarPopupOpen);
   };
 
-
- const handleEditProfileClick = () => {
-    const popupProfile = document.querySelector(".profile-popup");
-    popupProfile.classList.add("popup_opened");
+const handleEditProfileClick = () => {
+   setIsEditProfilePopupOpen(true);
   };
 
-
- const handleAddPlaceClick = () => {
-    const popupCard = document.querySelector(".popup_open-card");
-    popupCard.classList.add("popup_opened");
+const handleAddPlaceClick = () => {
+    setIsAddPlacePopupOpen(true);
   };
+
+const closeAllPopups = () => {
+  setIsEditAvatarPopupOpen(false);
+  setIsEditProfilePopupOpen(false);
+  setIsAddPlacePopupOpen(false);
+  };
+
 
   return (
     <div className="App">
@@ -37,12 +37,93 @@ const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState("");
           onEditProfile={handleEditProfileClick}
           onEditAvatar={handleEditAvatarClick}
           onAddPlace={handleAddPlaceClick}
+          // handleCardClick={handleCardClick}
         />
-         <PopupWithForm />
         <Footer />
+
+        <PopupWithForm
+           isOpen={isEditProfilePopupOpen}
+           onClose={closeAllPopups}
+           name="profile"
+           title="Редактировать профиль"
+         >
+          <input 
+            id = "input-name" 
+            type="text" 
+            name="input-name" 
+            className="popup__input-form" 
+            placeholder="Введите ваше имя" 
+            minLength="2" 
+            maxLength = "40" 
+            required/>
+          <span id="error-input-name" className="error-message"></span>
+          <input 
+            id = "input-about" 
+            type="text" 
+            name="input-about" 
+            className="popup__input-form" 
+            placeholder="Введите вашу работу" 
+            minLength="2" 
+            maxLength = "200" 
+            required/>
+          <span id="error-input-about" className="error-message"></span>
+         </PopupWithForm>
+
+         <PopupWithForm 
+           isOpen={isAddPlacePopupOpen}
+           onClose={closeAllPopups}
+           name="open-card"
+           title="Новое место"
+         >
+          <input 
+          id = "input-card" 
+          type="text" 
+          name="input-name" 
+          className="popup__input-form popup__input-form_position" 
+          placeholder="Название" 
+          minLength="2" 
+          maxLength = "30" 
+          required/>
+          <span id="error-input-card" className="error-message"></span>
+          <input 
+            id = "input-link" 
+            type="url" 
+            name="input-about" 
+            className="popup__input-form popup__input-form_link" 
+            placeholder="Ссылка на картинку" 
+            required/>
+          <span id="error-input-link" className="error-message"></span>
+         </PopupWithForm>
+
+         <PopupWithForm 
+           isOpen={isEditAvatarPopupOpen}
+           onClose={closeAllPopups}
+           name="new-avatar"
+           title="Обновить аватар"
+         >
+          <input 
+            id = "input-avatar" 
+            type="url" 
+            name="input-avatar" 
+            className="popup__input-form popup__input-form_link" 
+            placeholder="Ссылка на аватар" 
+            required/>
+          <span id="error-input-avatar" className="error-message"></span>
+         </PopupWithForm>
+
+        {/*          
+         <PopupWithForm 
+           isOpen={}
+           onClose={closeAllPopups}
+           name="card-delete"
+           title="Вы уверены?"
+         /> */}
+
       </div>
     </div>
   );
+  
 }
 
 export default App;
+

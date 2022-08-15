@@ -1,18 +1,34 @@
+import React from 'react';
 
+function ImagePopup({card, name, isOpen, onClose}) {
 
-function ImagePopup(props) {
+  React.useEffect(() => {
+    const closeEsc = (event) => {
+    if(event.key === "Escape") {
+      onClose();
+    }};
+
+    if(isOpen) {
+      document.addEventListener("keydown", closeEsc)
+    } else {
+      document.removeEventListener("keydown", closeEsc)
+    }
+      
+
+  }, [onClose, isOpen]);
 
   return (
-    <section className={`popup popup_${props.name} ${props.card.isOpen ? "popup_opened" : ''}`}>
+    <section className={`popup popup_${name} ${isOpen ? "popup_opened" : ''}`} 
+             onClick={onClose} >
         <div className="popup__box-picture">
           <button 
             aria-label="Закрыть"  
             type="button" 
             className="popup__button-cross"
-            onClick={() => { props.onClose() }}
+            onClick={onClose}
           ></button>
-          <img src={`${props.card.card.link}`} alt="" className="popup__picture" />
-          <p className="popup__text-picture"></p>
+          <img src={`${card?.link || '#'}`} alt={`${card?.name ?? ' '}`} className="popup__picture" />
+          <p className="popup__text-picture">{`${card?.name ?? ' '}`}</p>
         </div>
       </section>
       );

@@ -3,7 +3,7 @@ import api from '../utils/Api';
 import Card from '../components/Card.js';
 
 function Main(props) {
-  const {onEditAvatar, onEditProfile, onAddPlace, handleCardClick} = props;
+  const {onEditAvatar, onEditProfile, onAddPlace, onCardClick} = props;
 
   const [cards, setCards] = useState([]);
   const [userName, setUserName] = useState("");
@@ -76,11 +76,11 @@ const searchUserApiResults = () => {
         <section className="elements page__elements">
           {cards.length && cards.map((card) => (
             <Card 
+              card={card}
               key={card._id}
               name={card.name} 
               link={card.link}
-              onCardClick={handleCardClick}
-              // onDeleteCardClick={handleDeleteClick}
+              onCardClick={onCardClick}
             />
           ))}
         </section>

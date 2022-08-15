@@ -3,12 +3,19 @@ import Header from './Header.js';
 import Main from './Main.js';
 import Footer from './Footer.js';
 import PopupWithForm from './PopupWithForm.js';
-// import ImagePopup from './ImagePopup.js';
+import ImagePopup from './ImagePopup.js';
 
 function App() {
 const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
 const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
 const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
+const [selectedCard, setSelectedCard] = useState(null);
+
+
+const handleCardClick = (card) => {
+  setSelectedCard(card);
+  };
+
 
 const handleEditAvatarClick = () => {
     setIsEditAvatarPopupOpen(!isEditAvatarPopupOpen);
@@ -26,7 +33,9 @@ const closeAllPopups = () => {
   setIsEditAvatarPopupOpen(false);
   setIsEditProfilePopupOpen(false);
   setIsAddPlacePopupOpen(false);
+  setSelectedCard(false);
   };
+
 
 
   return (
@@ -37,7 +46,7 @@ const closeAllPopups = () => {
           onEditProfile={handleEditProfileClick}
           onEditAvatar={handleEditAvatarClick}
           onAddPlace={handleAddPlaceClick}
-          // handleCardClick={handleCardClick}
+          onCardClick={handleCardClick}
         />
         <Footer />
 
@@ -111,13 +120,20 @@ const closeAllPopups = () => {
           <span id="error-input-avatar" className="error-message"></span>
          </PopupWithForm>
 
-        {/*          
          <PopupWithForm 
-           isOpen={}
+          // isOpen={isEditDeletePopupOpen}
            onClose={closeAllPopups}
            name="card-delete"
            title="Вы уверены?"
-         /> */}
+         />
+
+
+        <ImagePopup
+           isOpen={selectedCard}
+           onClose={closeAllPopups}
+           name="box-picture"
+           card={selectedCard}
+         />
 
       </div>
     </div>

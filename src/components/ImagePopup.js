@@ -3,24 +3,18 @@ import React from 'react';
 function ImagePopup({card, name, isOpen, onClose}) {
 
   React.useEffect(() => {
-    const closeEsc = (event) => {
-    if(event.key === "Escape") {
-      onClose();
-    }};
+    const closeEsc = (event) => (event.key === "Escape") ? onClose() : "";
 
-    if(isOpen) {
-      document.addEventListener("keydown", closeEsc)
-    } else {
-      document.removeEventListener("keydown", closeEsc)
-    }
+    isOpen ? 
+      document.addEventListener("keydown", closeEsc):
+      document.removeEventListener("keydown", closeEsc);
       
-
   }, [onClose, isOpen]);
 
   return (
     <section className={`popup popup_${name} ${isOpen ? "popup_opened" : ''}`} 
              onClick={onClose} >
-        <div className="popup__box-picture">
+        <div className="popup__box-picture" onClick={(event) => {event.stopPropagation()}}>
           <button 
             aria-label="Закрыть"  
             type="button" 

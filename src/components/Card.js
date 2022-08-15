@@ -9,7 +9,7 @@ function Card(card) {
   };
 
   function handleClick() {
-    card.onCardClick(card);
+   card.onCardClick(card);
   }  
 
 

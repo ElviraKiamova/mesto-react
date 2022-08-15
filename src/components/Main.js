@@ -74,12 +74,12 @@ const searchUserApiResults = () => {
         </section>
 
         <section className="elements page__elements">
-          {cards.length && cards.map((card) => (
+          {cards.length && cards.map((data) => (
             <Card 
-              card={card}
-              key={card._id}
-              name={card.name} 
-              link={card.link}
+              card={data}
+              key={data._id}
+              name={data.name} 
+              link={data.link}
               onCardClick={onCardClick}
             />
           ))}

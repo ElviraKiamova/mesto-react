@@ -4,18 +4,13 @@ import React from 'react';
   const {title, name, id, onClose, children, isOpen} = props;
 
   React.useEffect(() => {
-    const closeEsc = (event) => {
-    if(event.key === "Escape") {
-      onClose();
-    }};
 
-    if(isOpen) {
-      document.addEventListener("keydown", closeEsc)
-    } else {
-      document.removeEventListener("keydown", closeEsc)
-    }
+    const closeEsc = (event) => (event.key === "Escape") ? onClose() : null;
+
+    isOpen ? 
+      document.addEventListener("keydown", closeEsc):
+      document.removeEventListener("keydown", closeEsc);
       
-
   }, [onClose, isOpen]);
 
 

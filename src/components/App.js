@@ -33,7 +33,7 @@ const closeAllPopups = () => {
   setIsEditAvatarPopupOpen(false);
   setIsEditProfilePopupOpen(false);
   setIsAddPlacePopupOpen(false);
-  setSelectedCard(false);
+  setSelectedCard(null);
   };
 
 
@@ -131,7 +131,7 @@ const closeAllPopups = () => {
         <ImagePopup
            isOpen={selectedCard}
            onClose={closeAllPopups}
-           name="box-picture"
+           name="big-picture"
            card={selectedCard}
          />
 

@@ -6,34 +6,51 @@ import PopupWithForm from './PopupWithForm.js';
 import ImagePopup from './ImagePopup.js';
 
 function App() {
-const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
-const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
-const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
-const [selectedCard, setSelectedCard] = useState(null);
+  const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] =   useState(false);
+  const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
+  const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
+  const [selectedCard, setSelectedCard] = useState({});
+  const [isSelectedCard, setIsSelectedCard] = useState(false);
 
+  const isOpen = isEditAvatarPopupOpen || isEditProfilePopupOpen || isAddPlacePopupOpen || selectedCard
 
-const handleCardClick = (card) => {
-  setSelectedCard(card);
+  React.useEffect(() => {
+    function closeByEscape(evt) {
+     if(evt.key === 'Escape') {
+        closeAllPopups();
+      }
+    }
+    if(isOpen) {
+      document.addEventListener('keydown', closeByEscape);
+      return () => {
+        document.removeEventListener('keydown', closeByEscape);
+      }
+   }
+  }, [isOpen]) 
+
+  const handleCardClick = (card) => {
+    setSelectedCard(card);
+    setIsSelectedCard(true);
   };
 
 
-const handleEditAvatarClick = () => {
+  const handleEditAvatarClick = () => {
     setIsEditAvatarPopupOpen(!isEditAvatarPopupOpen);
   };
 
-const handleEditProfileClick = () => {
-   setIsEditProfilePopupOpen(true);
+  const handleEditProfileClick = () => {
+    setIsEditProfilePopupOpen(true);
   };
 
-const handleAddPlaceClick = () => {
+  const handleAddPlaceClick = () => {
     setIsAddPlacePopupOpen(true);
   };
 
-const closeAllPopups = () => {
-  setIsEditAvatarPopupOpen(false);
-  setIsEditProfilePopupOpen(false);
-  setIsAddPlacePopupOpen(false);
-  setSelectedCard(null);
+  const closeAllPopups = () => {
+    setIsEditAvatarPopupOpen(false);
+    setIsEditProfilePopupOpen(false);
+    setIsAddPlacePopupOpen(false);
+    setIsSelectedCard(false);
   };
 
 
@@ -51,10 +68,11 @@ const closeAllPopups = () => {
         <Footer />
 
         <PopupWithForm
-           isOpen={isEditProfilePopupOpen}
-           onClose={closeAllPopups}
-           name="profile"
-           title="Редактировать профиль"
+          isOpen={isEditProfilePopupOpen}
+          onClose={closeAllPopups}
+          name="profile"
+          title="Редактировать профиль"
+          buttonText="Сохранить"
          >
           <input 
             id = "input-name" 
@@ -79,20 +97,21 @@ const closeAllPopups = () => {
          </PopupWithForm>
 
          <PopupWithForm 
-           isOpen={isAddPlacePopupOpen}
-           onClose={closeAllPopups}
-           name="open-card"
-           title="Новое место"
+            isOpen={isAddPlacePopupOpen}
+            onClose={closeAllPopups}
+            name="open-card"
+            title="Новое место"
+            buttonText="Создать"
          >
           <input 
-          id = "input-card" 
-          type="text" 
-          name="input-name" 
-          className="popup__input-form popup__input-form_position" 
-          placeholder="Название" 
-          minLength="2" 
-          maxLength = "30" 
-          required/>
+            id = "input-card" 
+            type="text" 
+            name="input-name" 
+            className="popup__input-form popup__input-form_position" 
+            placeholder="Название" 
+            minLength="2" 
+            maxLength = "30" 
+            required/>
           <span id="error-input-card" className="error-message"></span>
           <input 
             id = "input-link" 
@@ -105,10 +124,11 @@ const closeAllPopups = () => {
          </PopupWithForm>
 
          <PopupWithForm 
-           isOpen={isEditAvatarPopupOpen}
-           onClose={closeAllPopups}
-           name="new-avatar"
-           title="Обновить аватар"
+            isOpen={isEditAvatarPopupOpen}
+            onClose={closeAllPopups}
+            name="new-avatar"
+            title="Обновить аватар"
+            buttonText="Сохранить"
          >
           <input 
             id = "input-avatar" 
@@ -117,19 +137,19 @@ const closeAllPopups = () => {
             className="popup__input-form popup__input-form_link" 
             placeholder="Ссылка на аватар" 
             required/>
-          <span id="error-input-avatar" className="error-message"></span>
+          <span id="error-input-avatar"         className="error-message"></span>
          </PopupWithForm>
 
          <PopupWithForm 
           // isOpen={isEditDeletePopupOpen}
-           onClose={closeAllPopups}
-           name="card-delete"
-           title="Вы уверены?"
+            onClose={closeAllPopups}
+            name="card-delete"
+            title="Вы уверены?"
+            buttonText="Да"
          />
 
-
         <ImagePopup
-           isOpen={selectedCard}
+           isOpen={isSelectedCard}
            onClose={closeAllPopups}
            name="big-picture"
            card={selectedCard}

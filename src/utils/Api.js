@@ -1,9 +1,12 @@
 
 
 class Api {
-  constructor(config) {
-    this.url = config.url;
-    this.headers = config.headers;
+  constructor(url) {
+    this._url = url;
+    this._headers = {
+      authorization: '34063916-fb53-4e1b-84c7-1baa3625af58',
+      'Content-Type': 'application/json'
+    }
   }
 
   _checkResponse(res) {
@@ -14,25 +17,20 @@ class Api {
   }
 
    // отрисовка карточек с сервера
-   async getInitialCards() {
-    const res = await fetch(this.url + "/cards", {
-      headers: this.headers
-    });
-    if (res.ok) {
-      return res.json();
-    }
-    return await Promise.reject(`Ошибка: ${res.message}`);
+   getInitialCards() {
+    return fetch(`${this._url}/cards`, {
+      headers: this._headers,
+    })
+    .then(this._checkResponse);
+
   }
 
 
     // получаем информацию о пользователе
     getUserInfo() {
-      return fetch("https://nomoreparties.co/v1/cohort-45/users/me", {
+      return fetch(`${this._url}/users/me`, {
         method: "GET",
-        headers: {
-          authorization: '34063916-fb53-4e1b-84c7-1baa3625af58',
-          'Content-Type': 'application/json'
-        },
+        headers: this._headers,
       })
       .then(this._checkResponse)
     }
@@ -42,12 +40,9 @@ class Api {
 
   // Редактирование профиля
   editProfile(data) {
-    return fetch("https://mesto.nomoreparties.co/v1/cohort-45/users/me", {
+    return fetch(`${this._url}/users/me`, {
     method: "PATCH",
-    headers: {
-      authorization: '34063916-fb53-4e1b-84c7-1baa3625af58',
-      'Content-Type': 'application/json'
-    },
+    headers : this._headers,
       body: JSON.stringify(data)
     })
     .then(this._checkResponse)
@@ -57,12 +52,9 @@ class Api {
 
   // Обновление аватара пользователя
   handleUserAvatar(userAvatar) {
-    return fetch("https://mesto.nomoreparties.co/v1/cohort-45/users/me/avatar", {
+    return fetch(`${this._url}/users/me/avatar`, {
       method: 'PATCH',
-      headers: {
-        authorization: '34063916-fb53-4e1b-84c7-1baa3625af58',
-        'Content-Type': 'application/json'
-      },
+      headers: this._headers,
       body: JSON.stringify(userAvatar)
     })
     .then(this._checkResponse)
@@ -72,12 +64,9 @@ class Api {
 
   // Добавление новой карточки
   createCardApi(data) {
-    return fetch("https://mesto.nomoreparties.co/v1/cohort-45/cards", {
+    return fetch(`${this._url}/cards`, {
       method: "POST",
-      headers: {
-        authorization: '34063916-fb53-4e1b-84c7-1baa3625af58',
-        'Content-Type': 'application/json'
-      },
+      headers: this._headers,
       body: JSON.stringify(data)
 
     })
@@ -87,12 +76,9 @@ class Api {
 
   // Отображение количества лайков карточки
   toggleLike(id, isLiked) {
-    return fetch(`https://mesto.nomoreparties.co/v1/cohort-45/cards/${id}/likes`, {
+    return fetch(`${this._url}/cards/${id}/likes`, {
       method: isLiked ? "DELETE" : "PUT",
-      headers: {
-        authorization: '34063916-fb53-4e1b-84c7-1baa3625af58',
-        'Content-Type': 'application/json'
-      }
+      headers: this._headers,
     })
     .then(this._checkResponse);
   }
@@ -101,12 +87,9 @@ class Api {
 
     //Удаление карточки
     deleteCard(id) {
-      return fetch(`https://mesto.nomoreparties.co/v1/cohort-45/cards/${id}`, {
+      return fetch(`${this._url}/cards/${id}`, {
         method: "DELETE",
-        headers: {
-          authorization: '34063916-fb53-4e1b-84c7-1baa3625af58',
-          'Content-Type': 'application/json'
-        },
+        headers: this._headers,
       })
       .then(this._checkResponse)
     }
@@ -114,12 +97,6 @@ class Api {
 }
 
 
-const api = new Api({
-  url: 'https://mesto.nomoreparties.co/v1/cohort-45',
-  headers: {
-    authorization: '34063916-fb53-4e1b-84c7-1baa3625af58',
-    'Content-Type': 'application/json'
-  }
-});
+const api = new Api('https://mesto.nomoreparties.co/v1/cohort-45');
 
 export default api;

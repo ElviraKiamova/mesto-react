@@ -1,9 +1,10 @@
 import React, {
   useState,
   useEffect
-} from 'react'
+} from 'react';
 import api from '../utils/Api';
 import Card from '../components/Card.js';
+import {CurrentUserContext} from '../contexts/CurrentUserContext.js';
 
 function Main(props) {
   const {
@@ -13,12 +14,9 @@ function Main(props) {
     onCardClick
   } = props;
 
+  const userContext = React.useContext(CurrentUserContext);
+
   const [cards, setCards] = useState([]);
-  const [userName, setUserName] = useState("");
-  const [userDescription, setUserDescription] = useState("");
-  const [userAvatar, setUserAvatar] = useState("");
-
-
 
   const searchCardsApiResults = () => {
     api.getInitialCards()
@@ -30,32 +28,19 @@ function Main(props) {
       });
   };
 
-  const searchUserApiResults = () => {
-    api.getUserInfo()
-      .then(res => {
-        setUserAvatar(res.avatar);
-        setUserName(res.name);
-        setUserDescription(res.about);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
+ 
 
   useEffect(() => {
     searchCardsApiResults();
   }, []);
 
-  useEffect(() => {
-    searchUserApiResults();
-  }, []);
 
 
   return (
     <main className = "content">
       <section className = "profile page__profile">
         <button 
-          style = {{backgroundImage: `url(${userAvatar})`}}
+          style = {{backgroundImage: `url(${userContext.avatar})`}}
           onClick = {onEditAvatar}
           aria-label = "Править"
           type = "button"
@@ -64,7 +49,7 @@ function Main(props) {
         </button> 
         <div className = "profile__info" >
           <h1 className = "profile__title" >
-            {userName}
+            {userContext.name}
           </h1>
           <button 
             onClick = {onEditProfile}
@@ -73,7 +58,7 @@ function Main(props) {
             className = "profile__button-pen">
           </button>
           <p className = "profile__subtitle" >
-            {userDescription}
+            {userContext.about}
           </p>
         </div>
         <button 

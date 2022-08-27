@@ -8,16 +8,20 @@ function PopupWithForm(props) {
     onClose,
     children,
     isOpen,
-    buttonText
+    buttonText,
+    onSubmit,
   } = props;
+
+
+
 
 
   return (
     <section 
-      onClick = {onClose}
       className = {`popup popup_${name} ${isOpen ? "popup_opened" : ""}`}>
       <div className = "popup__container" >
         <form 
+          onSubmit= {onSubmit}
           id = {id}
           name = {name}
           className = "popup__form">
@@ -25,7 +29,6 @@ function PopupWithForm(props) {
               {children}
             <button 
               aria-label = "Сохранить"
-              type = "submit"
               className = "popup__button-save" >
                 {buttonText}
             </button>
@@ -34,7 +37,8 @@ function PopupWithForm(props) {
           onClick = {onClose}
           aria-label = "Закрыть"
           type = "button"
-          className = "popup__button-cross">
+          className = "popup__button-cross"
+          >
         </button> 
       </div>
     </section>

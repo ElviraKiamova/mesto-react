@@ -11,12 +11,27 @@ function Main(props) {
     onEditAvatar,
     onEditProfile,
     onAddPlace,
-    onCardClick
+    onCardClick,
   } = props;
 
-  const userContext = React.useContext(CurrentUserContext);
-
+  const currentUser = React.useContext(CurrentUserContext);
   const [cards, setCards] = useState([]);
+
+ 
+  function handleCardLike(card) {
+    const isLiked = card.likes.some(i => i._id === currentUser._id);
+    api.toggleLike(card._id, !isLiked).then((newCard) => {
+        setCards((state) => state.map((c) => c._id === card._id ? newCard : c));
+    });
+  } 
+
+  function handleCardDelete(card) {
+    const isOwn = card.owner._id === currentUser._id;
+    const cardDeleteButtonClassName = (
+      `card__delete-button ${isOwn ? 'card__delete-button_visible' : 'card__delete-button_hidden'}`
+    ); 
+    api.deleteCard();
+  } 
 
   const searchCardsApiResults = () => {
     api.getInitialCards()
@@ -28,8 +43,6 @@ function Main(props) {
       });
   };
 
- 
-
   useEffect(() => {
     searchCardsApiResults();
   }, []);
@@ -40,7 +53,7 @@ function Main(props) {
     <main className = "content">
       <section className = "profile page__profile">
         <button 
-          style = {{backgroundImage: `url(${userContext.avatar})`}}
+          style = {{backgroundImage: `url(${currentUser.avatar})`}}
           onClick = {onEditAvatar}
           aria-label = "Править"
           type = "button"
@@ -49,7 +62,7 @@ function Main(props) {
         </button> 
         <div className = "profile__info" >
           <h1 className = "profile__title" >
-            {userContext.name}
+            {currentUser.name}
           </h1>
           <button 
             onClick = {onEditProfile}
@@ -58,7 +71,7 @@ function Main(props) {
             className = "profile__button-pen">
           </button>
           <p className = "profile__subtitle" >
-            {userContext.about}
+            {currentUser.about}
           </p>
         </div>
         <button 
@@ -76,8 +89,11 @@ function Main(props) {
              card = {data} 
               key = {data._id} 
               name = {data.name} 
-             link = {data.link} 
-              onCardClick = {onCardClick}/>
+              link = {data.link} 
+              onCardClick = {onCardClick}
+              onCardLike = {handleCardLike}
+              onCardDelete = {handleCardDelete}
+              />
           )
         )
       } 

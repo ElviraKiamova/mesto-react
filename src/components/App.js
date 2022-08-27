@@ -1,7 +1,4 @@
-import React, {
-  useState,
-  useEffect
-} from 'react';
+import React, { useState, useEffect } from 'react';
 import api from '../utils/Api';
 import Header from './Header.js';
 import Main from './Main.js';
@@ -9,10 +6,17 @@ import Footer from './Footer.js';
 import PopupWithForm from './PopupWithForm.js';
 import ImagePopup from './ImagePopup.js';
 import {CurrentUserContext} from '../contexts/CurrentUserContext.js';
+import EditProfilePopup from './EditProfilePopup.js';
 
 function App() {
-  
   const [currentUser, setCurrentUser] = useState({});
+  const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] =   useState(false);
+  const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
+  const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
+  const [selectedCard, setSelectedCard] = useState({});
+  const [isSelectedCard, setIsSelectedCard] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+ 
   
   const searchCardsApiResults = () => {
     api.getUserInfo()
@@ -23,19 +27,26 @@ function App() {
         console.log(err);
       });
     };
-
     useEffect(() => {
       searchCardsApiResults();
     }, []);
+
+    const handleUpdateUser = () => {
+      api.editProfile()
+        .then(res => {
+          setCurrentUser(res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
   
-
-
-
-  const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] =   useState(false);
-  const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
-  const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
-  const [selectedCard, setSelectedCard] = useState({});
-  const [isSelectedCard, setIsSelectedCard] = useState(false);
+    useEffect(() => {
+      if(isSubmitted) {
+        handleUpdateUser();
+      }
+      setIsSubmitted(false);
+    }, [isSubmitted]);
 
   const isOpen = isEditAvatarPopupOpen || isEditProfilePopupOpen || isAddPlacePopupOpen || selectedCard
 
@@ -79,7 +90,6 @@ function App() {
   };
 
 
-
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="App">
@@ -93,34 +103,11 @@ function App() {
           />
           <Footer />
 
-          <PopupWithForm
+          <EditProfilePopup 
             isOpen={isEditProfilePopupOpen}
             onClose={closeAllPopups}
-            name="profile"
-            title="Редактировать профиль"
-            buttonText="Сохранить"
-          >
-            <input 
-              id = "input-name" 
-              type="text" 
-              name="input-name" 
-              className="popup__input-form" 
-              placeholder="Введите ваше имя" 
-              minLength="2" 
-              maxLength = "40" 
-              required/>
-            <span id="error-input-name" className="error-message"></span>
-            <input 
-              id = "input-about" 
-              type="text" 
-              name="input-about" 
-              className="popup__input-form" 
-              placeholder="Введите вашу работу" 
-              minLength="2" 
-              maxLength = "200" 
-              required/>
-            <span id="error-input-about" className="error-message"></span>
-          </PopupWithForm>
+            onUpdateUser = {handleUpdateUser}
+          /> 
 
           <PopupWithForm 
               isOpen={isAddPlacePopupOpen}

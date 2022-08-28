@@ -1,30 +1,40 @@
 import React from "react";
 import { CurrentUserContext } from "../contexts/CurrentUserContext.js";
 
-function Card({ name, link, card, onCardClick, onCardLike, onCardDelete }) {
-  const [heart, setHeart] = React.useState();
-
+function Card({ card, onCardClick, onCardLike, onCardDelete }) {
+  // const [heart, setHeart] = React.useState();
   const currentUser = React.useContext(CurrentUserContext);
 
-  const isOwn = card.owner._id === currentUser._id;
-  const cardDeleteButtonClassName = `card__delete-button ${
-    isOwn ? "card__delete-button_visible" : "card__delete-button_hidden"
-  }`;
+  const { link, name, _id, owner: {_id: ownerId} } = card;
+  const likes = card.likes.map((item) => item._id);
 
-  const isLiked = card.likes.some((i) => i._id === currentUser._id);
-  const cardLikeButtonClassName = `...`;
+  const isOwn = ownerId === currentUser?._id;
+  const isLiked = likes.includes(currentUser?._id);
+
+  function handleLikes() {
+    if(likes.length > 0) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 
   function handleClick() {
     onCardClick(card);
   }
 
   function handleLikeClick() {
-    onCardLike(card);
+    onCardLike(_id, isLiked);
   }
 
   function handleDeleteClick() {
     onCardDelete(card);
   }
+  
+  // const cardLikeButtonClassName = `...`;
+  // const cardDeleteButtonClassName = `card__delete-button ${
+  //   isOwn ? "card__delete-button_visible" : "card__delete-button_hidden"
+  // }`;
 
   return (
     <article className="element">
@@ -32,6 +42,7 @@ function Card({ name, link, card, onCardClick, onCardLike, onCardDelete }) {
         onClick={handleDeleteClick}
         type="button"
         className="element__delete-button"
+        // className={isOwn ? "element__delete-button" : "element__delete-button_disabled"}
       ></button>
       <img
         className="element__image"
@@ -44,10 +55,14 @@ function Card({ name, link, card, onCardClick, onCardLike, onCardDelete }) {
         <div className="element__container-heart">
           <button
             type="button"
-            className="element__heart-button"
+            className= {`element__heart-button ${isLiked ? "element__heart-button_dark" : ""}`}
             onClick={handleLikeClick}
           ></button>
-          <p className="element__counter">{heart}</p>
+          <p
+            className={`element__counter ${handleLikes() ? "element__counter_active" : ""}`}
+          >
+            {likes.length}
+          </p>
         </div>
       </div>
     </article>

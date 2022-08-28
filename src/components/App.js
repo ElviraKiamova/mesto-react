@@ -17,6 +17,24 @@ function App() {
   const [selectedCard, setSelectedCard] = useState(null);
   const [isSelectedCard, setIsSelectedCard] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [cards, setCards] = useState([]);
+
+
+
+  const searchCardsApiResult = () => {
+    api.getInitialCards()
+      .then(res => {
+        setCards(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  useEffect(() => {
+    searchCardsApiResult();
+  }, []);
+
 
   const searchCardsApiResults = () => {
     api
@@ -94,7 +112,19 @@ function App() {
     setIsEditProfilePopupOpen(false);
     setIsAddPlacePopupOpen(false);
     setIsSelectedCard(false);
+    setSelectedCard(null);
   };
+
+  function handleCardLike(id, isLiked) {
+    api
+      .toggleLike(id, isLiked)
+      .then((res) => {
+        setCards(cards.map((card) => (card._id === res._id ? res : card)));
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
@@ -104,10 +134,12 @@ function App() {
             <Route exact path="/">
               <Header />
               <Main
+                cards={cards}
                 onEditProfile={handleEditProfileClick}
                 onEditAvatar={handleEditAvatarClick}
                 onAddPlace={handleAddPlaceClick}
                 onCardClick={handleCardClick}
+                onCardLike={handleCardLike}
               />
               <Footer />
             </Route>

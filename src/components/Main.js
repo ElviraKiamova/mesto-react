@@ -1,7 +1,4 @@
-import React, {
-  useState,
-  useEffect
-} from 'react';
+import React from 'react';
 import api from '../utils/Api';
 import Card from '../components/Card.js';
 import {CurrentUserContext} from '../contexts/CurrentUserContext.js';
@@ -12,40 +9,36 @@ function Main(props) {
     onEditProfile,
     onAddPlace,
     onCardClick,
+    onCardLike,
+    onCardDelete,
+    cards
   } = props;
 
   const currentUser = React.useContext(CurrentUserContext);
-  const [cards, setCards] = useState([]);
+  // const [cards, setCards] = useState([]);
 
- 
-  function handleCardLike(card) {
-    const isLiked = card.likes.some(i => i._id === currentUser._id);
-    api.toggleLike(card._id, !isLiked).then((newCard) => {
-        setCards((state) => state.map((c) => c._id === card._id ? newCard : c));
-    });
-  } 
 
-  function handleCardDelete(card) {
-    const isOwn = card.owner._id === currentUser._id;
-    const cardDeleteButtonClassName = (
-      `card__delete-button ${isOwn ? 'card__delete-button_visible' : 'card__delete-button_hidden'}`
-    ); 
-    api.deleteCard();
-  } 
+  // function handleCardDelete(card) {
+  //   const isOwn = card.owner._id === currentUser._id;
+  //   const cardDeleteButtonClassName = (
+  //     `card__delete-button ${isOwn ? 'card__delete-button_visible' : 'card__delete-button_hidden'}`
+  //   ); 
+  //   api.deleteCard();
+  // } 
 
-  const searchCardsApiResults = () => {
-    api.getInitialCards()
-      .then(res => {
-        setCards(res);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
+  // const searchCardsApiResults = () => {
+  //   api.getInitialCards()
+  //     .then(res => {
+  //       setCards(res);
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // };
 
-  useEffect(() => {
-    searchCardsApiResults();
-  }, []);
+  // useEffect(() => {
+  //   searchCardsApiResults();
+  // }, []);
 
 
 
@@ -84,15 +77,13 @@ function Main(props) {
     
       <section className = "elements page__elements"> 
        {cards.length && cards.map(
-         (data) => (
+         (card) => (
            <Card 
-             card = {data} 
-              key = {data._id} 
-              name = {data.name} 
-              link = {data.link} 
+              card = {card} 
+              key = {card._id}
               onCardClick = {onCardClick}
-              onCardLike = {handleCardLike}
-              onCardDelete = {handleCardDelete}
+              onCardLike = {onCardLike}
+              onCardDelete = {onCardDelete}
               />
           )
         )

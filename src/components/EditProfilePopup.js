@@ -12,10 +12,10 @@ function EditProfilePopup(props) {
 
    function handleSubmit(e) {
     e.preventDefault();
-    props.onUpdateUser({
-      name: name,
-      about: description,
-    });
+    // props.onUpdateUser({
+    //   name: name,
+    //   about: description,
+    // });
   } 
 
   React.useEffect(() => {

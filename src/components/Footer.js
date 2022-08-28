@@ -1,13 +1,12 @@
-import React from 'react';
+import React from "react";
 
 function Footer() {
-
-  return ( 
-    <footer className = "footer">
-      <p className = "footer__text" > 
-      {`© ${new Date().getFullYear()} Mesto Russia`}
+  return (
+    <footer className="footer">
+      <p className="footer__text">
+        {`© ${new Date().getFullYear()} Mesto Russia`}
       </p>
-    </footer >
+    </footer>
   );
 }
 

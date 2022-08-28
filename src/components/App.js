@@ -126,6 +126,18 @@ function App() {
       });
   }
 
+  function handleCardDelete(cardId) {
+    api
+      .deleteCard(cardId)
+      .then((res) => {
+        // проверить будет ли работать
+        setCards(cards.filter(card => card._id !== cardId));
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="App">
@@ -140,6 +152,7 @@ function App() {
                 onAddPlace={handleAddPlaceClick}
                 onCardClick={handleCardClick}
                 onCardLike={handleCardLike}
+                onCardDelete={handleCardDelete}
               />
               <Footer />
             </Route>
@@ -158,7 +171,7 @@ function App() {
             isOpen={isEditProfilePopupOpen}
             onClose={closeAllPopups}
             onUpdateUser={handleUpdateUser}
-
+            buttonText="Сохранить"
           />
 
           <PopupWithForm

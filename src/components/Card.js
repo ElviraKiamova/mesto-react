@@ -2,7 +2,6 @@ import React from "react";
 import { CurrentUserContext } from "../contexts/CurrentUserContext.js";
 
 function Card({ card, onCardClick, onCardLike, onCardDelete }) {
-  // const [heart, setHeart] = React.useState();
   const currentUser = React.useContext(CurrentUserContext);
 
   const { link, name, _id, owner: {_id: ownerId} } = card;
@@ -41,8 +40,7 @@ function Card({ card, onCardClick, onCardLike, onCardDelete }) {
       <button
         onClick={handleDeleteClick}
         type="button"
-        className="element__delete-button"
-        // className={isOwn ? "element__delete-button" : "element__delete-button_disabled"}
+        className={isOwn ? "element__delete-button" : "element__delete-button_disabled"}
       ></button>
       <img
         className="element__image"
@@ -59,7 +57,7 @@ function Card({ card, onCardClick, onCardLike, onCardDelete }) {
             onClick={handleLikeClick}
           ></button>
           <p
-            className={`element__counter ${handleLikes() ? "element__counter_active" : ""}`}
+            className={`${handleLikes() ? "element__counter_active" : "element__counter"}`}
           >
             {likes.length}
           </p>

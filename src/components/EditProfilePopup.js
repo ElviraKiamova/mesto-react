@@ -1,49 +1,44 @@
 
-import React, {useState} from 'react';
+import React, { useState, useContext } from 'react';
 import PopupWithForm from './PopupWithForm.js';
-import {CurrentUserContext} from '../contexts/CurrentUserContext.js';
+import { CurrentUserContext } from '../contexts/CurrentUserContext.js';
 
 
-function EditProfilePopup(props) {
+function EditProfilePopup({ onUpdateUser, isOpen, onClose, buttonText }) {
   
-  const [name, setName] = useState();
-  const [description, setDescription] = useState();
+  const [inputs, setInputs] = useState({ name: "", about: "" });
   const currentUser = React.useContext(CurrentUserContext);
 
    function handleSubmit(e) {
-    e.preventDefault();
-    // props.onUpdateUser({
-    //   name: name,
-    //   about: description,
-    // });
+    onUpdateUser(inputs);
   } 
 
   React.useEffect(() => {
-    setName(currentUser.name);
-    setDescription(currentUser.about);
+    if(currentUser.name&&currentUser.about) {
+      setInputs({
+        name: currentUser.name,
+        about: currentUser.about,
+      });
+    }
   }, [currentUser]); 
 
-  function handleChangeName(e) {
-    setName(e.target.value);
-  }
-
-  function handleChangeDescription(e) {
-    setDescription(e.target.value);
+  function handleChange(e) {
+    setInputs((inputs) => ({ ...inputs, [e.target.name]: e.target.value }));
   }
 
 
   return ( 
     <PopupWithForm
             onSubmit = {handleSubmit}
-            isOpen={props.isOpen}
-            onClose={props.onClose}
+            isOpen={isOpen}
+            onClose={onClose}
             name="profile"
             title="Редактировать профиль"
-            buttonText="Сохранить"
+            buttonText={buttonText}
           >
             <input 
-              value={name} 
-              onChange={handleChangeName}
+              value={inputs.name} 
+              onChange={handleChange}
               id = "input-name" 
               type="text" 
               name="input-name" 
@@ -54,8 +49,8 @@ function EditProfilePopup(props) {
               required/>
             <span id="error-input-name" className="error-message"></span>
             <input 
-              value={description} 
-              onChange={handleChangeDescription}
+              value={inputs.about} 
+              onChange={handleChange}
               id = "input-about" 
               type="text" 
               name="input-about" 

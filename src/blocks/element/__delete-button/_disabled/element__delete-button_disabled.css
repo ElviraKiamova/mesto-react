@@ -1,6 +1,4 @@
 .element__delete-button_disabled {
-   transition: all 0.6s ease;
-	opacity: 0;
-	visibility: hidden;
+  display: none;
 }
 

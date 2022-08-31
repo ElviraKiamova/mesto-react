@@ -7,7 +7,7 @@ import PopupWithForm from "./PopupWithForm.js";
 import ImagePopup from "./ImagePopup.js";
 import { CurrentUserContext } from "../contexts/CurrentUserContext.js";
 import EditProfilePopup from "./EditProfilePopup.js";
-import { Switch, Route } from "react-router-dom";
+import EditAvatarPopup from "./EditAvatarPopup.js";
 
 function App() {
   const [currentUser, setCurrentUser] = useState({});
@@ -47,7 +47,6 @@ function App() {
     searchCardsApiResults();
   }, []);
 
-  
   function handleUpdateUser(data) {
     api
       .editProfile(data)
@@ -57,6 +56,18 @@ function App() {
       })
       .catch((err) => {
         console.log(err);
+      });
+  }
+
+  function handleAvatarUpdate(data) {
+    api
+      .handleUserAvatar(data)
+      .then((res) => {
+        setCurrentUser(res);
+        closeAllPopups();
+      })
+      .catch((err) => {
+        console.error(err);
       });
   }
 
@@ -154,8 +165,14 @@ function App() {
           <EditProfilePopup
             isOpen={isEditProfilePopupOpen}
             onClose={closeAllPopups}
-            onUpdateUser={handleUpdateUser}
             onSubmit={handleUpdateUser}
+            buttonText="Сохранить"
+          />
+
+          <EditAvatarPopup
+            isOpen={isEditAvatarPopupOpen}
+            onClose={closeAllPopups}
+            onSubmit={handleAvatarUpdate}
             buttonText="Сохранить"
           />
 
@@ -186,24 +203,6 @@ function App() {
               required
             />
             <span id="error-input-link" className="error-message"></span>
-          </PopupWithForm>
-
-          <PopupWithForm
-            isOpen={isEditAvatarPopupOpen}
-            onClose={closeAllPopups}
-            name="new-avatar"
-            title="Обновить аватар"
-            buttonText="Сохранить"
-          >
-            <input
-              id="input-avatar"
-              type="url"
-              name="input-avatar"
-              className="popup__input-form popup__input-form_link"
-              placeholder="Ссылка на аватар"
-              required
-            />
-            <span id="error-input-avatar" className="error-message"></span>
           </PopupWithForm>
 
           <PopupWithForm

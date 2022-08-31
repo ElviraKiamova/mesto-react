@@ -58,7 +58,10 @@ class Api {
     return fetch(`${this._url}/users/me/avatar`, {
       method: 'PATCH',
       headers: this._headers,
-      body: JSON.stringify(userAvatar)
+      body: JSON.stringify({
+        avatar: userAvatar.avatar
+      })
+    
     })
     .then(this._checkResponse)
   }

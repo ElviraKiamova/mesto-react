@@ -23,7 +23,6 @@ function EditAvatarPopup({ onSubmit, isOpen, onClose, buttonText }) {
       name="new-avatar"
       title="Обновить аватар"
       buttonText={buttonText}
-     
     >
       <input
         ref={ref}

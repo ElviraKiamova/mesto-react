@@ -8,6 +8,7 @@ import ImagePopup from "./ImagePopup.js";
 import { CurrentUserContext } from "../contexts/CurrentUserContext.js";
 import EditProfilePopup from "./EditProfilePopup.js";
 import EditAvatarPopup from "./EditAvatarPopup.js";
+import AddPlacePopup from "./AddPlacePopup";
 
 function App() {
   const [currentUser, setCurrentUser] = useState({});
@@ -64,6 +65,18 @@ function App() {
       .handleUserAvatar(data)
       .then((res) => {
         setCurrentUser(res);
+        closeAllPopups();
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }
+
+  function handleAddPlaceSubmit(data) {
+    api
+      .createCardApi(data)
+      .then((newCard) => {
+        setCards([newCard, ...cards]);
         closeAllPopups();
       })
       .catch((err) => {
@@ -176,34 +189,12 @@ function App() {
             buttonText="Сохранить"
           />
 
-          <PopupWithForm
+          <AddPlacePopup
             isOpen={isAddPlacePopupOpen}
             onClose={closeAllPopups}
-            name="open-card"
-            title="Новое место"
-            buttonText="Создать"
-          >
-            <input
-              id="input-card"
-              type="text"
-              name="input-name"
-              className="popup__input-form popup__input-form_position"
-              placeholder="Название"
-              minLength="2"
-              maxLength="30"
-              required
-            />
-            <span id="error-input-card" className="error-message"></span>
-            <input
-              id="input-link"
-              type="url"
-              name="input-about"
-              className="popup__input-form popup__input-form_link"
-              placeholder="Ссылка на картинку"
-              required
-            />
-            <span id="error-input-link" className="error-message"></span>
-          </PopupWithForm>
+            onSubmit={handleAddPlaceSubmit}
+            buttonText="Сохранить"
+          />
 
           <PopupWithForm
             onClose={closeAllPopups}

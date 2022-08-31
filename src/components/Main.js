@@ -15,31 +15,6 @@ function Main(props) {
   } = props;
 
   const currentUser = React.useContext(CurrentUserContext);
-  // const [cards, setCards] = useState([]);
-
-
-  // function handleCardDelete(card) {
-  //   const isOwn = card.owner._id === currentUser._id;
-  //   const cardDeleteButtonClassName = (
-  //     `card__delete-button ${isOwn ? 'card__delete-button_visible' : 'card__delete-button_hidden'}`
-  //   ); 
-  //   api.deleteCard();
-  // } 
-
-  // const searchCardsApiResults = () => {
-  //   api.getInitialCards()
-  //     .then(res => {
-  //       setCards(res);
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     });
-  // };
-
-  // useEffect(() => {
-  //   searchCardsApiResults();
-  // }, []);
-
 
 
   return (

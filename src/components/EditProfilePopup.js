@@ -1,35 +1,42 @@
+import React from "react";
+import PopupWithForm from "./PopupWithForm";
+import { CurrentUserContext } from "../contexts/CurrentUserContext";
 
-import React, { useState, useContext } from 'react';
-import PopupWithForm from './PopupWithForm.js';
-import { CurrentUserContext } from '../contexts/CurrentUserContext.js';
 
-
-function EditProfilePopup({ onUpdateUser, isOpen, onClose, buttonText }) {
+function EditProfilePopup({ onSubmit, isOpen, onClose, buttonText }) {
   
-  const [inputs, setInputs] = useState({ name: "", about: "" });
+  const [name, setName] = React.useState('');
+  const [description, setDescription] = React.useState('');
   const currentUser = React.useContext(CurrentUserContext);
 
-   function handleSubmit(e) {
-    onUpdateUser(inputs);
-  } 
+  
+  function handleNameChange(evt) {
+    setName(evt.target.value);
+  }
+
+  function handleDescriptionChange(evt) {
+    setDescription(evt.target.value);
+  }
+
+  function handleSubmit(evt) {
+    evt.preventDefault();
+    onSubmit({
+      profile_name: name,
+      profile_job: description
+    });
+  }
 
   React.useEffect(() => {
-    if(currentUser.name&&currentUser.about) {
-      setInputs({
-        name: currentUser.name,
-        about: currentUser.about,
-      });
+    if (isOpen) {
+      setName(currentUser.name);
+      setDescription(currentUser.about);
     }
-  }, [currentUser]); 
-
-  function handleChange(e) {
-    setInputs((inputs) => ({ ...inputs, [e.target.name]: e.target.value }));
-  }
+  }, [isOpen, currentUser]);
 
 
   return ( 
     <PopupWithForm
-            onSubmit = {handleSubmit}
+            onSubmit={handleSubmit}
             isOpen={isOpen}
             onClose={onClose}
             name="profile"
@@ -37,11 +44,11 @@ function EditProfilePopup({ onUpdateUser, isOpen, onClose, buttonText }) {
             buttonText={buttonText}
           >
             <input 
-              value={inputs.name} 
-              onChange={handleChange}
+              value={name} 
+              onChange={handleNameChange}
               id = "input-name" 
               type="text" 
-              name="input-name" 
+              name="profile_name" 
               className="popup__input-form" 
               placeholder="Введите ваше имя" 
               minLength="2" 
@@ -49,11 +56,11 @@ function EditProfilePopup({ onUpdateUser, isOpen, onClose, buttonText }) {
               required/>
             <span id="error-input-name" className="error-message"></span>
             <input 
-              value={inputs.about} 
-              onChange={handleChange}
+              value={description} 
+              onChange={handleDescriptionChange}
               id = "input-about" 
               type="text" 
-              name="input-about" 
+              name="profile_job" 
               className="popup__input-form" 
               placeholder="Введите вашу работу" 
               minLength="2" 

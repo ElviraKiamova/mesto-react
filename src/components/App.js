@@ -16,14 +16,12 @@ function App() {
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
   const [selectedCard, setSelectedCard] = useState(null);
   const [isSelectedCard, setIsSelectedCard] = useState(false);
-  const [isSubmitted, setIsSubmitted] = useState(false);
   const [cards, setCards] = useState([]);
 
-
-
   const searchCardsApiResult = () => {
-    api.getInitialCards()
-      .then(res => {
+    api
+      .getInitialCards()
+      .then((res) => {
         setCards(res);
       })
       .catch((err) => {
@@ -34,7 +32,6 @@ function App() {
   useEffect(() => {
     searchCardsApiResult();
   }, []);
-
 
   const searchCardsApiResults = () => {
     api
@@ -50,23 +47,18 @@ function App() {
     searchCardsApiResults();
   }, []);
 
-  const handleUpdateUser = () => {
+  
+  function handleUpdateUser(data) {
     api
-      .editProfile()
+      .editProfile(data)
       .then((res) => {
         setCurrentUser(res);
+        closeAllPopups();
       })
       .catch((err) => {
         console.log(err);
       });
-  };
-
-  useEffect(() => {
-    if (isSubmitted) {
-      handleUpdateUser();
-    }
-    setIsSubmitted(false);
-  }, [isSubmitted]);
+  }
 
   const isOpen =
     isEditAvatarPopupOpen ||
@@ -88,7 +80,6 @@ function App() {
       };
     }
   }, [isOpen]);
-
 
   const handleCardClick = (card) => {
     setSelectedCard(card);
@@ -126,12 +117,11 @@ function App() {
       });
   }
 
-  function handleCardDelete(cardId) {
+  function handleCardDelete(card) {
     api
-      .deleteCard(cardId)
-      .then((res) => {
-        // проверить будет ли работать
-        setCards(cards.filter(card => card._id !== cardId));
+      .deleteCard(card._id)
+      .then(() => {
+        setCards((cards) => cards.filter((c) => c._id !== card && c));
       })
       .catch((err) => {
         console.log(err);
@@ -142,23 +132,17 @@ function App() {
     <CurrentUserContext.Provider value={currentUser}>
       <div className="App">
         <div className="page">
-          <Switch>
-            <Route exact path="/">
-              <Header />
-              <Main
-                cards={cards}
-                onEditProfile={handleEditProfileClick}
-                onEditAvatar={handleEditAvatarClick}
-                onAddPlace={handleAddPlaceClick}
-                onCardClick={handleCardClick}
-                onCardLike={handleCardLike}
-                onCardDelete={handleCardDelete}
-              />
-              <Footer />
-            </Route>
-
-            <Route path="/photos/:_id"></Route>
-          </Switch>
+          <Header />
+          <Main
+            cards={cards}
+            onEditProfile={handleEditProfileClick}
+            onEditAvatar={handleEditAvatarClick}
+            onAddPlace={handleAddPlaceClick}
+            onCardClick={handleCardClick}
+            onCardLike={handleCardLike}
+            onCardDelete={handleCardDelete}
+          />
+          <Footer />
 
           <ImagePopup
             isOpen={isSelectedCard}
@@ -171,6 +155,7 @@ function App() {
             isOpen={isEditProfilePopupOpen}
             onClose={closeAllPopups}
             onUpdateUser={handleUpdateUser}
+            onSubmit={handleUpdateUser}
             buttonText="Сохранить"
           />
 

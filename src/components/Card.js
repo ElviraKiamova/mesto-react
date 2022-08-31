@@ -10,6 +10,7 @@ function Card({ card, onCardClick, onCardLike, onCardDelete }) {
   const isOwn = ownerId === currentUser?._id;
   const isLiked = likes.includes(currentUser?._id);
 
+
   function handleLikes() {
     if(likes.length > 0) {
       return true;
@@ -29,11 +30,7 @@ function Card({ card, onCardClick, onCardLike, onCardDelete }) {
   function handleDeleteClick() {
     onCardDelete(card);
   }
-  
-  // const cardLikeButtonClassName = `...`;
-  // const cardDeleteButtonClassName = `card__delete-button ${
-  //   isOwn ? "card__delete-button_visible" : "card__delete-button_hidden"
-  // }`;
+
 
   return (
     <article className="element">

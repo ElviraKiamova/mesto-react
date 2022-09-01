@@ -4,11 +4,12 @@ import { CurrentUserContext } from "../contexts/CurrentUserContext.js";
 function Card({ card, onCardClick, onCardLike, onCardDelete }) {
   const currentUser = React.useContext(CurrentUserContext);
 
-  const { link, name, _id, owner: {_id: ownerId} } = card;
+  const { link, name, _id } = card;
   const likes = card.likes.map((item) => item._id);
 
-  const isOwn = ownerId === currentUser?._id;
-  const isLiked = likes.includes(currentUser?._id);
+  const isOwn = card.owner._id === currentUser._id;
+  const isLiked = card.likes.some(i => i._id === currentUser._id);
+
 
 
   function handleLikes() {
@@ -28,7 +29,7 @@ function Card({ card, onCardClick, onCardLike, onCardDelete }) {
   }
 
   function handleDeleteClick() {
-    onCardDelete(card);
+    onCardDelete(card._id);
   }
 
 

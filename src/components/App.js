@@ -141,15 +141,13 @@ function App() {
       });
   }
 
-  function handleCardDelete(card) {
-    api
-      .deleteCard(card._id)
-      .then(() => {
-        setCards((cards) => cards.filter((c) => c._id !== card && c));
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+
+  function handleCardDelete(cardId) {
+    api.deleteCard(cardId).then(() => {
+      setCards(cards.filter(card => card._id !== cardId));
+    }).catch((err) => {
+      console.error(err);
+    });
   }
 
   return (

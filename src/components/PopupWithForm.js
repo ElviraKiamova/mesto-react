@@ -1,17 +1,26 @@
 import React from "react";
 
 function PopupWithForm(props) {
-  const { title, name, id, onClose, children, isOpen, buttonText, onSubmit } =
-    props;
+  const {
+    title,
+    name,
+    id,
+    onClose,
+    children,
+    isOpen,
+    buttonText,
+    onSubmit,
+    onCloseClick,
+  } = props;
 
   return (
-    <section
-      onClick={onClose}
+    <div
+      onClick={onCloseClick}
       className={`popup popup_${name} ${isOpen ? "popup_opened" : ""}`}
     >
-      <div className="popup__container" onClick={(e) => e.stopPropagation()}>
+      <div className="popup__container">
         <form onSubmit={onSubmit} id={id} name={name} className="popup__form">
-          <h2 className="popup__title"> {title}</h2>
+          <h2 className="popup__title">{title}</h2>
           {children}
           <button
             type="submit"
@@ -26,9 +35,9 @@ function PopupWithForm(props) {
           aria-label="Закрыть"
           type="button"
           className="popup__button-cross"
-        ></button>
+        />
       </div>
-    </section>
+    </div>
   );
 }
 

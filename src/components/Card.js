@@ -8,17 +8,7 @@ function Card({ card, onCardClick, onCardLike, onCardDelete }) {
   const likes = card.likes.map((item) => item._id);
 
   const isOwn = card.owner._id === currentUser._id;
-  const isLiked = card.likes.some(i => i._id === currentUser._id);
-
-
-
-  function handleLikes() {
-    if(likes.length > 0) {
-      return true;
-    } else {
-      return false;
-    }
-  }
+  const isLiked = card.likes.some((i) => i._id === currentUser._id);
 
   function handleClick() {
     onCardClick(card);
@@ -32,14 +22,15 @@ function Card({ card, onCardClick, onCardLike, onCardDelete }) {
     onCardDelete(card._id);
   }
 
-
   return (
     <article className="element">
       <button
         onClick={handleDeleteClick}
         type="button"
-        className={isOwn ? "element__delete-button" : "element__delete-button_disabled"}
-      ></button>
+        className={
+          isOwn ? "element__delete-button" : "element__delete-button_disabled"
+        }
+      />
       <img
         className="element__image"
         alt={name}
@@ -51,11 +42,13 @@ function Card({ card, onCardClick, onCardLike, onCardDelete }) {
         <div className="element__container-heart">
           <button
             type="button"
-            className= {`element__heart-button ${isLiked ? "element__heart-button_dark" : ""}`}
+            className={`element__heart-button ${
+              isLiked ? "element__heart-button_dark" : ""
+            }`}
             onClick={handleLikeClick}
-          ></button>
+          />
           <p
-            className={`${handleLikes() ? "element__counter_active" : "element__counter"}`}
+            className="element__counter"
           >
             {likes.length}
           </p>

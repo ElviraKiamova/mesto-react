@@ -34,7 +34,7 @@ function App() {
     searchCardsApiResult();
   }, []);
 
-  const searchCardsApiResults = () => {
+  const searchUserApiResult = () => {
     api
       .getUserInfo()
       .then((res) => {
@@ -45,7 +45,7 @@ function App() {
       });
   };
   useEffect(() => {
-    searchCardsApiResults();
+    searchUserApiResult();
   }, []);
 
   function handleUpdateUser(data) {
@@ -96,13 +96,12 @@ function App() {
         closeAllPopups();
       }
     }
-
     if (isOpen) {
       document.addEventListener("keydown", closeByEscape);
-      return () => {
-        document.removeEventListener("keydown", closeByEscape);
-      };
     }
+    return () => {
+      document.removeEventListener("keydown", closeByEscape);
+    };
   }, [isOpen]);
 
   const handleCardClick = (card) => {
@@ -141,13 +140,21 @@ function App() {
       });
   }
 
-
   function handleCardDelete(cardId) {
-    api.deleteCard(cardId).then(() => {
-      setCards(cards.filter(card => card._id !== cardId));
-    }).catch((err) => {
-      console.error(err);
-    });
+    api
+      .deleteCard(cardId)
+      .then(() => {
+        setCards(cards.filter((card) => card._id !== cardId));
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }
+
+  function handlePopupCloseClick(evt) {
+    if (evt.target.classList.contains("popup")) {
+      closeAllPopups();
+    }
   }
 
   return (
@@ -171,6 +178,7 @@ function App() {
             onClose={closeAllPopups}
             name="big-picture"
             card={selectedCard}
+            onCloseClick={handlePopupCloseClick}
           />
 
           <EditProfilePopup
@@ -178,6 +186,7 @@ function App() {
             onClose={closeAllPopups}
             onSubmit={handleUpdateUser}
             buttonText="Сохранить"
+            onCloseClick={handlePopupCloseClick}
           />
 
           <EditAvatarPopup
@@ -185,6 +194,7 @@ function App() {
             onClose={closeAllPopups}
             onSubmit={handleAvatarUpdate}
             buttonText="Сохранить"
+            onCloseClick={handlePopupCloseClick}
           />
 
           <AddPlacePopup
@@ -192,6 +202,7 @@ function App() {
             onClose={closeAllPopups}
             onSubmit={handleAddPlaceSubmit}
             buttonText="Сохранить"
+            onCloseClick={handlePopupCloseClick}
           />
 
           <PopupWithForm
